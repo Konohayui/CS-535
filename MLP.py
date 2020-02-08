@@ -156,9 +156,9 @@ class MLP(object):
 
 if __name__ == '__main__':
     if sys.version_info[0] < 3:
-        data = pickle.load(open('cifar_2class_py2.p', 'rb'))
-	else:
-	    data = pickle.load(open('cifar_2class_py2.p', 'rb'), encoding='bytes')
+	data = pickle.load(open('cifar_2class_py2.p', 'rb'))
+    else:
+	data = pickle.load(open('cifar_2class_py2.p', 'rb'), encoding='bytes')
 
     train_x = data['train_data']
     train_y = data['train_labels']
