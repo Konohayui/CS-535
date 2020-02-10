@@ -1,3 +1,19 @@
+"""
+INSERT YOUR NAME HERE
+"""
+
+
+from __future__ import division
+from __future__ import print_function
+
+import sys
+try:
+    import _pickle as pickle
+except:
+    import pickle
+
+import numpy as np
+
 # This is a class for a LinearTransform layer which takes an input 
 # weight matrix W and computes W x as the forward step
 class LinearTransform(object):
