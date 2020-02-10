@@ -70,7 +70,7 @@ class SigmoidCrossEntropy(object):
     def forward(self, x, y_batch):
         # DEFINE forward function
         self.predictions = 1.0/(1.0+np.exp(-x))
-        # this is an error in previous calculation that
+        # there is an error in previous calculation that
         # we couldn't spot it out 
         # and gives negative loss, so add a negative sign.
         loss = -1*(y_batch*np.log(self.predictions+1e-8)+(1.0-y_batch) * np.log(1.0-self.predictions+1e-8))
