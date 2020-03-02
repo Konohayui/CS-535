@@ -25,8 +25,8 @@ class Net(nn.Module):
         self.fc1 = nn.Linear(64 * 8 * 8, 512)
         self.fc2 = nn.Linear(512, 10)
         self.fc1_5 = nn.Linear(512, 512)
-        self.batch_norm = nn.modules.batchnorm.BatchNorm1d(512)
-        self.dropout = nn.modules.Dropout(p=0.3)
+        self.batch_norm = nn.BatchNorm1d(512)
+        self.dropout = nn.Dropout(p=0.3)
         self.has_batch = has_batch
         self.more_linear = more_linear
         self.has_dropout = has_dropout
@@ -45,7 +45,7 @@ class Net(nn.Module):
         if self.has_batch:
             x = self.batch_norm(x)
         if self.more_linear:
-            x = self.fc1_5(x)
+            x = F.relu(self.fc1_5(x))
         x = self.fc2(x)
         return x
 
@@ -170,7 +170,7 @@ if __name__ == "__main__":
     """
     print('Building vanilla model...')
     torch.cuda.empty_cache()
-    net = Net(has_batch = False, more_linear = False).cuda()
+    net = Net(has_batch = False, more_linear = False, has_dropout = False).cuda()
     net.train() # Why would I do this?
     build_model(net, trainloader, testloader, optimizer_candidate = 1, path_name = "no_batch")
 
@@ -179,7 +179,7 @@ if __name__ == "__main__":
     """
     print('Building vanilla model with batch-normalization...')
     torch.cuda.empty_cache()
-    net = Net(has_batch = True, more_linear = False).cuda()
+    net = Net(has_batch = True, more_linear = False, has_dropout = False).cuda()
     net.train()
     build_model(net, trainloader, testloader, optimizer_candidate = 1, path_name = "with_batch")
 
@@ -188,7 +188,7 @@ if __name__ == "__main__":
     """
     print('Building vanilla model with additional linear layer...')
     torch.cuda.empty_cache()
-    net = Net(has_batch = False, more_linear = True).cuda()
+    net = Net(has_batch = False, more_linear = True, has_dropout = False).cuda()
     net.train()
     build_model(net, trainloader, testloader, optimizer_candidate = 1, path_name = "additional_linear")
 
@@ -197,7 +197,7 @@ if __name__ == "__main__":
     """
     print('Building vanilla model with additional linear layer by using pre-trained weight...')
     torch.cuda.empty_cache()
-    net = Net(has_batch = False, more_linear = True).cuda()
+    net = Net(has_batch = False, more_linear = True, has_dropout = False).cuda()
     net.train()
     pre_trained_dict = torch.load("additional_linear.pth")
     current_trained_dict = net.state_dict()
@@ -217,7 +217,7 @@ if __name__ == "__main__":
 
     print('Building vanilla model with Adam...')
     torch.cuda.empty_cache()
-    net = Net(has_batch = False, more_linear = False).cuda()
+    net = Net(has_batch = False, more_linear = False, has_dropout = False).cuda()
     net.train()
     build_model(net, trainloader, testloader, optimizer_candidate = 3, path_name = "adam")
 
@@ -226,6 +226,6 @@ if __name__ == "__main__":
     """
     print('Building vanilla model with adam and dropout...')
     torch.cuda.empty_cache()
-    net = Net(has_batch = False, more_linear = False).cuda()
+    net = Net(has_batch = False, more_linear = False, has_dropout = True).cuda()
     net.train()
     build_model(net, trainloader, testloader, optimizer_candidate = 3, path_name = "with_dropout")
